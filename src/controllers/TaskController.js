@@ -50,26 +50,43 @@ exports.taskUpdate = (req, res) => {
 
 // ListByTask Status
 
-exports.listTaskByStatus=(req,res)=>{
-    let status= req.params.status;
-    let email=req.headers['email'];
+exports.listTaskByStatus = (req, res) => {
+    let status = req.params.status;
+    let email = req.headers['email'];
     TaskModel.aggregate([
-        {$match:{status:status,email:email}},
-        {$project:{
-                _id:1,title:1,description:1, status:1,
-                createdDate:{
-                    $dateToString:{
-                        date:"$createdDate",
-                        format:"%d-%m-%Y"
+        {$match: {status: status, email: email}},
+        {
+            $project: {
+                _id: 1, title: 1, description: 1, status: 1,
+                createdDate: {
+                    $dateToString: {
+                        date: "$createdDate",
+                        format: "%d-%m-%Y"
                     }
                 }
-            }}
-    ], (err,data)=>{
-        if(err){
-            res.status(400).json({status:"fail",data:err})
+            }
         }
-        else{
-            res.status(200).json({status:"success",data:data})
+    ], (err, data) => {
+        if (err) {
+            res.status(400).json({status: "fail", data: err})
+        } else {
+            res.status(200).json({status: "success", data: data})
+        }
+    })
+}
+
+// Summary Count of Task
+
+exports.taskStatusByCount = (req, res) => {
+    let email = req.headers['email']
+    TaskModel.aggregate([
+        {$match: {email}},
+        {$group: {_id: "$status", sum: {$count: {}}}}
+    ], (err, data) => {
+        if (err) {
+            res.status(400).json({status:"Something Went Wrong",data:err})
+        } else {
+            res.status(200).json({status:"Successfully Found the Status Count!",data:data})
         }
     })
 }

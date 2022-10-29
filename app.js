@@ -34,8 +34,9 @@ const limiter= rateLimit({windowMs:15*60*1000,max:3000})
 app.use(limiter)
 
 // Mongo DB Database Connection
-let URI="mongodb://127.0.0.1:27017/TaskManager";
-let OPTION={user:"",pass:"",autoIndex:true}
+// let URI="mongodb://127.0.0.1:27017/TaskManager";
+let URI="mongodb+srv://ZahedMongo:0D8putbAgHJfJtr1@cluster0.agrwzim.mongodb.net/task-manager?retryWrites=true&w=majority";
+let OPTION={user:"ZahedMongo",pass:"0D8putbAgHJfJtr1",autoIndex:true}
 mongoose.connect(URI,OPTION,(error)=>{
     console.log("Connection Success")
     console.log(error)
